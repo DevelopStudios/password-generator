@@ -1,2 +1,2 @@
-# passwor-generator
+# password-generator
 This is a password generator app.
