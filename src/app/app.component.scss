@@ -1,20 +1,23 @@
-.outer {
+.password-generator-container {
     display: grid;
     place-items: center;
     width: 100vw;
     height: 100vh;
   }
 
-  .inner {
+  .password-generator-card {
     padding: 20px;
-    .top-text {
+  }
+
+  .password-generator-title {
         font-family: 'YourCustomFontName', sans-serif;
         font-size: 24px;
         color: #817D92;
         text-align: center;
         margin-bottom: 42px;
     }
-    .custom-input {
+
+  .password-display {
         background-color: #222;
         color: #54535B;
         font-family: 'YourCustomFontName1', sans-serif;
@@ -25,21 +28,14 @@
         box-sizing: border-box;
         outline: none;
         width: 540px;
-      }
-
-      .custom-input.with-icon {
         background-image: url('../assets/images/icon-copy.svg');
         background-repeat: no-repeat;
         background-position: right 35px center;
         background-size: 20px;
         padding-right: 40px;
+        cursor: pointer;
       }
 
-      .custom-input.with-icon:hover {
-        cursor:pointer;
-      }
-
-      .custom-input:focus {
+  .password-display:focus {
         color: #eee;
       }
-  }
