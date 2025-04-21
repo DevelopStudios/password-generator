@@ -1,0 +1,12 @@
+.outer {
+    display: grid;
+    place-items: center; /* Centers both horizontally and vertically */
+    /* Optional styling for the outer container */
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .inner {
+    padding: 20px;
+    border: 1px solid #999;
+  }

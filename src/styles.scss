@@ -1,1 +1,33 @@
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'MyCustomFont'; /* Choose a unique name for your font */
+    src: url('../src/assets/fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: normal; /* Define the default font weight */
+    font-style: normal;  /* Define the default font style */
+    font-display: swap; /* Recommended for performance */
+  }
+  
+  /* You can define other font weights and styles if needed */
+  @font-face {
+    font-family: 'MyCustomFont1';
+    src: url('/assets/fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'MyCustomFont2';
+    src: url('/assets/fonts/static/JetBrainsMono-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  body {
+    background: #1E1E1E;
+  }
+
