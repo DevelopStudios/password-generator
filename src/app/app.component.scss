@@ -1,12 +1,45 @@
 .outer {
     display: grid;
-    place-items: center; /* Centers both horizontally and vertically */
-    /* Optional styling for the outer container */
+    place-items: center;
     width: 100vw;
     height: 100vh;
   }
-  
+
   .inner {
     padding: 20px;
-    border: 1px solid #999;
+    .top-text {
+        font-family: 'YourCustomFontName', sans-serif;
+        font-size: 24px;
+        color: #817D92;
+        text-align: center;
+        margin-bottom: 42px;
+    }
+    .custom-input {
+        background-color: #222;
+        color: #54535B;
+        font-family: 'YourCustomFontName1', sans-serif;
+        font-size: 32px;
+        border: none;
+        padding: 25px 35px;
+        margin: 0;
+        box-sizing: border-box;
+        outline: none;
+        width: 540px;
+      }
+
+      .custom-input.with-icon {
+        background-image: url('../assets/images/icon-copy.svg');
+        background-repeat: no-repeat;
+        background-position: right 35px center;
+        background-size: 20px;
+        padding-right: 40px;
+      }
+
+      .custom-input.with-icon:hover {
+        cursor:pointer;
+      }
+
+      .custom-input:focus {
+        color: #eee;
+      }
   }
