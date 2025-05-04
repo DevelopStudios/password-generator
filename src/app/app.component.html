@@ -4,9 +4,23 @@
       Password Generator
     </div>
     <input type="text" class="password-display" value="P4$5W0rD!">
-  </div>
-  <div class="result-card">
-    test
+    <div class="result-container">
+      <div class="character-lenght">
+        <div class="title">
+          Character Length
+        </div>
+        <div class="ammount">
+          {{mySliderValue}}
+        </div>
+      </div>
+      <app-slider
+      [min]="1"
+      [max]="20"
+      [step]="1"
+      [(value)]="mySliderValue"
+></app-slider>
     </div>
+  </div>
+  
 </div>
 

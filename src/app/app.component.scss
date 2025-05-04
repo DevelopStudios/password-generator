@@ -5,9 +5,34 @@
     height: 100vh;
   }
 
-  .password-generator-card {
-    padding: 20px;
-  }
+    .password-generator-card {
+      padding: 20px;
+  
+      .result-container {
+        background: #24232C;
+        margin-top: 24px;
+        .character-lenght {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-left: 34px;
+          padding-right: 34px;
+          padding-top:27px;
+          padding-bottom: 16px;
+          .title {
+            font-family: 'YourCustomFontName1';
+            color: #E6E5EA;
+            font-size: 18px;
+          }
+          .ammount {
+            font-family: 'YourCustomFontName1';
+            color: #A4FFAF;
+            font-size:32px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
 
   .password-generator-title {
         font-family: 'YourCustomFontName', sans-serif;
@@ -18,7 +43,7 @@
     }
 
   .password-display {
-        background-color: #222;
+        background-color: #24232C;
         color: #54535B;
         font-family: 'YourCustomFontName1', sans-serif;
         font-size: 32px;
@@ -38,4 +63,4 @@
 
   .password-display:focus {
         color: #eee;
-      }
+  }
