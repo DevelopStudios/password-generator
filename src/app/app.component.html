@@ -13,14 +13,51 @@
           {{mySliderValue}}
         </div>
       </div>
-      <app-slider
-      [min]="1"
-      [max]="20"
-      [step]="1"
-      [(value)]="mySliderValue"
-></app-slider>
+      <app-slider [min]="1" [max]="20" [step]="1" [(value)]="mySliderValue"></app-slider>
+      <div class="check-container">
+        <ul class="criteria-list">
+          <li class="criterion">
+            <input type="checkbox" id="crit-uppercase" class="criterion__checkbox-input" checked>
+            <label for="crit-uppercase" class="criterion__label">
+              <span class="criterion__checkbox-visual"></span>
+              <span class="criterion__text">Include Uppercase Letters</span>
+            </label>
+          </li>
+          <li class="criterion">
+            <input type="checkbox" id="crit-lowercase" class="criterion__checkbox-input" checked>
+            <label for="crit-lowercase" class="criterion__label">
+              <span class="criterion__checkbox-visual"></span>
+              <span class="criterion__text">Include Lowercase Letters</span>
+            </label>
+          </li>
+          <li class="criterion">
+            <input type="checkbox" id="crit-numbers" class="criterion__checkbox-input" checked >
+            <label for="crit-numbers" class="criterion__label">
+              <span class="criterion__checkbox-visual"></span>
+              <span class="criterion__text">Include Numbers</span>
+            </label>
+          </li>
+          <li class="criterion">
+            <input type="checkbox" id="crit-symbols" class="criterion__checkbox-input">
+            <label for="crit-symbols" class="criterion__label">
+              <span class="criterion__checkbox-visual"></span>
+              <span class="criterion__text">Include Symbols</span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="strength-indicator">
+          <span class="strength-indicator__title">STRENGTH</span>
+          <span class="strength-indicator__level-text">MEDIUM</span>
+          <div class="strength-indicator__bar-container">
+            <span class="strength-indicator__bar-segment is-filled"></span>
+            <span class="strength-indicator__bar-segment is-filled"></span>
+            <span class="strength-indicator__bar-segment is-filled"></span>
+            <span class="strength-indicator__bar-segment"></span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  
-</div>
 
+</div>

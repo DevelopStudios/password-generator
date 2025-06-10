@@ -13,7 +13,6 @@ export class AppComponent implements AfterViewInit {
 
   title = 'password-generator';
   mySliderValue = 9; // Initial value
-  ngAfterViewInit(): void {
-  
+  ngAfterViewInit(): void {  
   }
 }
