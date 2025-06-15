@@ -72,20 +72,17 @@
     --text-color-secondary: #A0A0A0;
     --accent-color-checked: #4CAF50;
     --accent-color-strength: #F8CD65;
-    --checkbox-border-color: #505050;
-    --checkbox-bg-unchecked: #3A3940;
+    --checkbox-border-color: #E6E5EA;
+    --checkbox-bg-unchecked: #23222A;
     --bar-segment-empty-bg: #3A3940;
-    --font-family-primary: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    --base-font-size: 14px;
-    --border-radius-s: 4px;
-    --border-radius-m: 6px;
+    --font-family-primary: YourCustomFontName1;
+    --base-font-size: 16px;
 
     background-color: var(--bg-color-primary);
     color: var(--text-color-primary);
     font-family: var(--font-family-primary);
     font-size: var(--base-font-size);
-    padding: 20px;
-    border-radius: var(--border-radius-m);
+    padding: 20px 35px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
@@ -127,7 +124,7 @@
     background-color: var(--checkbox-bg-unchecked);
     border: 1px solid var(--checkbox-border-color);
     border-radius: var(--border-radius-s);
-    margin-right: 10px;
+    margin-right: 20px;
     position: relative;
     flex-shrink: 0;
 }
@@ -152,7 +149,8 @@
 .criterion__text {
     font-size: var(--base-font-size);
     color: var(--text-color-primary);
-    line-height: 1.4;
+    font-weight:bold;
+    line-height: 2;
 }
 
 .strength-indicator {
@@ -160,12 +158,12 @@
     align-items: center;
     justify-content: space-between;
     background-color: rgba(0,0,0,0.1);
-    padding: 12px 15px;
+    padding: 16px 32px;
     border-radius: var(--border-radius-s);
 }
 
 .strength-indicator__title {
-    font-size: calc(var(--base-font-size) * 0.85);
+    font-size: 18px;
     color: var(--text-color-secondary);
     text-transform: uppercase;
     font-weight: bold;
@@ -173,8 +171,8 @@
 }
 
 .strength-indicator__level-text {
-    font-size: calc(var(--base-font-size) * 0.85);
-    color: var(--text-color-secondary);
+    font-size: 20px;
+    color: #fff;
     text-transform: uppercase;
     font-weight: bold;
     margin-right: 10px;
@@ -182,19 +180,48 @@
 
 .strength-indicator__bar-container {
     display: flex;
-    gap: 4px;
+    gap: 10px;
 }
 
 .strength-indicator__bar-segment {
-    width: 10px;
+    width: 8px;
     height: 30px;
-    background-color: var(--bar-segment-empty-bg);
-    border: 1px solid var(--checkbox-border-color);
-    border-radius: 2px;
+    background-color:rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--checkbox-border-color);
     transition: background-color 0.3s ease;
 }
 
 .strength-indicator__bar-segment.is-filled {
     background-color: var(--accent-color-strength);
     border-color: var(--accent-color-strength);
+}
+
+//Button CSS
+.generate-button-no-material {
+  background-color: #A4FFAF; 
+  color: #212529; 
+  font-family: 'YourCustomFontName1';
+  font-size: 18px;
+  font-weight: bold; 
+  padding: 24px 176px; 
+  margin-top:35px;
+  border: none; 
+  cursor: pointer; 
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.generate-button-no-material:hover {
+  background-color: #c0ebd0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.generate-button-no-material .arrow {
+  margin-left: 8px;
+  font-family: 'YourCustomFontName1';
+  font-size: 18px;
+  font-weight: bold; 
 }
