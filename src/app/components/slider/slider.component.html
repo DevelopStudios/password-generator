@@ -1,9 +1,10 @@
 <div class="slider-container">
-    <div class="slider-track">
+    <div class="slider-track" #sliderTrack> <div class="slider-track-fill" [style.width.px]="fillWidth"></div>
+
       <div
         class="slider-thumb"
-        [style.left.px]="valuePosition"
+        #sliderThumb [style.left.px]="thumbPosition"
         (mousedown)="startDrag($event)"
       ></div>
     </div>
-  </div>
+</div>

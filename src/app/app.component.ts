@@ -11,7 +11,6 @@ import { SliderComponent } from './components/slider/slider.component';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements AfterViewInit {
-
   title = 'password-generator';
   mySliderValue = 9; // Initial value
   ngAfterViewInit(): void {  

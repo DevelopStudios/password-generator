@@ -1,91 +1,145 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common'; // Add this import for common Angular directives
 
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [],
+  imports: [CommonModule], // Include CommonModule here
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.scss'
 })
-export class SliderComponent {
+export class SliderComponent implements OnInit, AfterViewInit {
   @Input() min = 0;
   @Input() max = 100;
   @Input() step = 1;
+
   @Input()
   get value(): number {
     return this._value;
   }
   set value(newValue: number) {
-    this._value = Math.max(this.min, Math.min(this.max, newValue));
-    this.valueChange.emit(this._value);
-    this.updateThumbPosition();
+    const steppedValue = Math.round(newValue / this.step) * this.step;
+    const clampedValue = Math.max(this.min, Math.min(this.max, steppedValue));
+
+    // Only update if the value has actually changed to prevent unnecessary re-renders/emits
+    if (this._value !== clampedValue) {
+      this._value = clampedValue;
+      this.valueChange.emit(this._value);
+      this.updateSliderPositions(); // Update thumb and fill positions whenever value changes
+    }
   }
-  private _value = 0;
+  private _value = 0; // Internal private value backing the 'value' input
 
   @Output() valueChange = new EventEmitter<number>();
 
-  valuePosition = 0;
-  isDragging = false;
+  // Properties to control HTML elements' styles (bound via [style.left.px] and [style.width.px])
+  thumbPosition = 0; // Position for the left edge of the thumb (center will be at this point due to transform)
+  fillWidth = 0;     // Width of the filled part of the track
+
+  isDragging = false; // Flag to indicate if the slider is being dragged
+
+  // Use @ViewChild for robust and Angular-idiomatic access to DOM elements within the template
+  @ViewChild('sliderTrack') sliderTrack!: ElementRef<HTMLDivElement>;
+  @ViewChild('sliderThumb') sliderThumb!: ElementRef<HTMLDivElement>;
 
   constructor() {
-    this.updateThumbPosition();
+    // Initial value setup: if _value is 0 (default) and min is not 0, set _value to min
+    // This provides a good default if 'value' input is not provided initially.
+    if (this._value === 0 && this.min !== 0) {
+      this._value = this.min;
+    }
   }
 
   ngOnInit(): void {
-    this.updateThumbPosition();
+    // Ensure initial positioning is correct based on the initial value
+    // This is called after inputs are bound.
+    this.updateSliderPositions();
   }
 
-  updateThumbPosition(): void {
+  ngAfterViewInit(): void {
+    // This hook is called after the component's view has been fully initialized,
+    // ensuring that @ViewChild references (sliderTrack, sliderThumb) are available.
+    this.updateSliderPositions();
+  }
+
+  /**
+   * Calculates and updates the pixel positions for the thumb and the track fill.
+   */
+  updateSliderPositions(): void {
+    // Ensure elements are available before trying to get their dimensions
+    if (!this.sliderTrack || !this.sliderThumb) {
+      // This can happen in constructor or ngOnInit if elements aren't rendered yet.
+      // ngAfterViewInit helps mitigate this, but a check is still good.
+      return;
+    }
+
+    const trackWidth = this.sliderTrack.nativeElement.clientWidth;
+    // const thumbWidth = this.sliderThumb.nativeElement.clientWidth; // Not directly used in position calc here
+
     const range = this.max - this.min;
+    // Normalize the current value to a 0-1 range based on min/max
     const normalizedValue = range === 0 ? 0 : (this.value - this.min) / range;
-    this.valuePosition = normalizedValue * (this.getTrackWidth() - this.getThumbWidth());
+    this.thumbPosition = normalizedValue * trackWidth;
+    // The fill width extends to the same point as the thumb's center
+    this.fillWidth = this.thumbPosition;
   }
 
-  getTrackWidth(): number {
-    const trackElement = document.querySelector('.slider-track');
-    return trackElement ? trackElement.clientWidth : 0;
-  }
-
-  getThumbWidth(): number {
-    const thumbElement = document.querySelector('.slider-thumb');
-    return thumbElement ? thumbElement.clientWidth : 0;
-  }
-
+  /**
+   * Starts the dragging process when the mouse is pressed down on the thumb.
+   * @param event The mouse event.
+   */
   startDrag(event: MouseEvent): void {
+    event.preventDefault(); // Prevent default browser actions (like text selection) during drag
     this.isDragging = true;
-    document.addEventListener('mousemove', this.drag);
-    document.addEventListener('mouseup', this.stopDrag);
+
+    // Add event listeners to the global document to track mouse movement anywhere on the page
+    // Using arrow functions for dragHandler and stopDragHandler automatically binds 'this' context
+    document.addEventListener('mousemove', this.dragHandler);
+    document.addEventListener('mouseup', this.stopDragHandler);
+
+    // Immediately call dragHandler to handle cases where user clicks directly on the thumb to set value
+    this.dragHandler(event);
   }
 
-  drag = (event: MouseEvent): void => {
-    if (this.isDragging) {
-      const trackElement = document.querySelector('.slider-track');
-      const thumbElement = document.querySelector('.slider-thumb');
-      if (trackElement && thumbElement) {
-        const trackRect = trackElement.getBoundingClientRect();
-        const thumbRect = thumbElement.getBoundingClientRect();
-        const offsetX = event.clientX - trackRect.left;
-        const trackWidth = trackRect.width;
-        const thumbWidth = thumbRect.width;
+  /**
+   * Handles the dragging motion, updating the slider's value based on mouse position.
+   * Defined as an arrow function to automatically bind 'this' context.
+   * @param event The mouse event.
+   */
+  dragHandler = (event: MouseEvent): void => {
+    if (this.isDragging && this.sliderTrack) {
+      const trackRect = this.sliderTrack.nativeElement.getBoundingClientRect();
+      const offsetX = event.clientX - trackRect.left; // Mouse X position relative to track's left edge
 
-        let newPosition = offsetX - thumbWidth / 2;
-        newPosition = Math.max(0, Math.min(trackWidth - thumbWidth, newPosition));
+      // Clamp the mouse position within the bounds of the track
+      let newPosition = Math.max(0, Math.min(trackRect.width, offsetX));
 
-        const normalizedPosition = newPosition / (trackWidth - thumbWidth);
-        const newValue = this.min + normalizedPosition * (this.max - this.min);
-        this.value = Math.round(newValue / this.step) * this.step;
-      }
+      // Calculate normalized value (0-1) based on clamped position
+      const normalizedPosition = newPosition / trackRect.width;
+      const newValue = this.min + normalizedPosition * (this.max - this.min);
+
+      // Update the component's value. The 'value' setter will handle clamping, stepping,
+      // emitting valueChange, and updating thumb/fill positions.
+      this.value = newValue;
     }
   };
 
-  stopDrag = (): void => {
+  /**
+   * Stops the dragging process when the mouse button is released.
+   * Defined as an arrow function to automatically bind 'this' context.
+   */
+  stopDragHandler = (): void => {
     this.isDragging = false;
-    document.removeEventListener('mousemove', this.drag);
-    document.removeEventListener('mouseup', this.stopDrag);
+    document.removeEventListener('mousemove', this.dragHandler);
+    document.removeEventListener('mouseup', this.stopDragHandler);
   };
 
+  /**
+   * Listens for window resize events to re-calculate slider element positions.
+   */
   @HostListener('window:resize')
   onResize(): void {
-    this.updateThumbPosition();
+    // Re-calculate positions when window resizes, as track width might change
+    this.updateSliderPositions();
   }
 }

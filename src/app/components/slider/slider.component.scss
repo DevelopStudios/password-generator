@@ -32,3 +32,79 @@
   .slider-thumb:active {
     cursor: grabbing;
   }
+
+  /* Define your color variables. Ensure these match your app's global theme colors. */
+/* If these variables are already defined globally (e.g., in :root), you can omit this :host block. */
+:host {
+    --track-fill-color: #A4FFAF; /* This is your light green from the design */
+    --track-empty-color: #3A3940; /* A darker grey for the empty part of the track */
+    --thumb-border-color: #23222A; /* Your dark color for the thumb border */
+}
+
+.slider-container {
+    /* Keeping your current styles for the container */
+    width: 92%;
+    height: 30px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+    margin: auto;
+}
+
+.slider-track {
+    /* This is the base color of the track (the "empty" part) */
+    background-color: var(--track-empty-color);
+    height: 8px; /* Adjusted height for visual match with the design */
+    width: 100%;
+    border-radius: 3px;
+    position: relative; /* Essential for positioning the fill and thumb inside it */
+    cursor: pointer; /* Indicates the track itself is interactive */
+}
+
+/* NEW CSS for the filled portion of the track */
+.slider-track-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%; /* Makes it the same height as the .slider-track */
+    background-color: var(--track-fill-color); /* Your light green fill color */
+    border-radius: 3px; /* Matches the track's border-radius */
+    /* Its width will be controlled dynamically by [style.width.px]="fillWidth" in HTML and TypeScript */
+}
+
+.slider-thumb {
+    width: 28px;
+    height: 28px;
+    background-color: white; /* Changed from #eee to pure white for the thumb */
+    border: 2px solid var(--thumb-border-color); /* Added the dark border as per design */
+    border-radius: 50%; /* Makes it circular */
+    position: absolute;
+    top: 50%; /* Centers the thumb vertically relative to the track */
+    /* 'left' property is controlled by [style.left.px]="thumbPosition" from TypeScript */
+    transform: translate(-50%, -50%); /* Adjusts the thumb's position to perfectly center its *own* middle on the 'left' coordinate */
+    cursor: grab; /* Cursor to indicate it's draggable */
+    z-index: 2; /* Ensures the thumb is rendered above the track fill */
+    box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+    transition: border-color 0.1s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover and Active states for the thumb */
+.slider-thumb:hover {
+    border-color: var(--track-fill-color); /* Slightly darker border on hover for subtle feedback */
+    background: var(--track-empty-color);
+}
+
+.slider-thumb:active {
+    cursor: grabbing; /* Cursor when actively dragging */
+    border-color: var(--track-fill-color); /* Slightly darker border on hover for subtle feedback */
+    background: var(--track-empty-color);
+}
+
+/* Optional: Focus style for accessibility */
+/* This assumes your thumb can receive focus (e.g., if you add tabindex="0" to the div in HTML) */
+.slider-thumb:focus {
+    box-shadow: 0 0 0 3px var(--track-fill-color), 0 0 0 6px rgba(0, 0, 0, 0.2); /* Green glow on focus */
+    outline: none; /* Remove default browser outline */
+}
