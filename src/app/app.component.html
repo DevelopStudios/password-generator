@@ -3,42 +3,42 @@
     <div class="password-generator-title">
       Password Generator
     </div>
-    <input type="text" class="password-display" value="P4$5W0rD!">
+    <input type="text" class="password-display" [(ngModel)]="generatedPassword" (input)="updateStrength(generatedPassword())">
     <div class="result-container">
       <div class="character-lenght">
         <div class="title">
           Character Length
         </div>
         <div class="ammount">
-          {{mySliderValue}}
+          {{mySliderValue()}}
         </div>
       </div>
       <app-slider [min]="1" [max]="20" [step]="1" [(value)]="mySliderValue"></app-slider>
       <div class="check-container">
         <ul class="criteria-list">
           <li class="criterion">
-            <input type="checkbox" id="crit-uppercase" class="criterion__checkbox-input">
+            <input type="checkbox" id="crit-uppercase" class="criterion__checkbox-input" [(ngModel)]="includeUppercase">
             <label for="crit-uppercase" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Uppercase Letters</span>
             </label>
           </li>
           <li class="criterion">
-            <input type="checkbox" id="crit-lowercase" class="criterion__checkbox-input" >
+            <input type="checkbox" id="crit-lowercase" class="criterion__checkbox-input" [(ngModel)]="includeLowercase">
             <label for="crit-lowercase" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Lowercase Letters</span>
             </label>
           </li>
           <li class="criterion">
-            <input type="checkbox" id="crit-numbers" class="criterion__checkbox-input">
+            <input type="checkbox" id="crit-numbers" class="criterion__checkbox-input" [(ngModel)]="includeNumbers">
             <label for="crit-numbers" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Numbers</span>
             </label>
           </li>
           <li class="criterion">
-            <input type="checkbox" id="crit-symbols" class="criterion__checkbox-input">
+            <input type="checkbox" id="crit-symbols" class="criterion__checkbox-input" [(ngModel)]="includeSymbols">
             <label for="crit-symbols" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Symbols</span>
@@ -48,16 +48,15 @@
 
         <div class="strength-indicator">
           <span class="strength-indicator__title">STRENGTH</span>
-          <span class="strength-indicator__level-text">MEDIUM</span>
+          <span class="strength-indicator__level-text">{{passwordStrengthText()}}</span>
           <div class="strength-indicator__bar-container">
-            <span class="strength-indicator__bar-segment is-filled"></span>
-            <span class="strength-indicator__bar-segment is-filled"></span>
-            <span class="strength-indicator__bar-segment is-filled"></span>
-            <span class="strength-indicator__bar-segment"></span>
+            @for (bar of [1,2,3,4]; track bar) {
+              <span class="strength-indicator__bar-segment" [class.is-filled]="bar <= strengthLevel()"></span>
+            }
           </div>
         </div>
         <div class="button-">
-          <button class="generate-button-no-material">
+          <button class="generate-button-no-material" (click)="generatePassword()">
             GENERATE <span class="arrow">&rarr;</span>
           </button>
       </div>
