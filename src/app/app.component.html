@@ -3,7 +3,26 @@
     <div class="password-generator-title">
       Password Generator
     </div>
-    <input type="text" class="password-display" [(ngModel)]="generatedPassword" (input)="updateStrength(generatedPassword())">
+    <div class="password-display-wrapper">
+        <input type="text" placeholder="P4$5W0rD!" class="password-display" [(ngModel)]="generatedPassword" (input)="updateStrength(generatedPassword())">
+        @if(isCopied()) {
+          <span class="copy-feedback">
+          COPIED
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#A4FFAF">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+          </svg>
+        </span>
+        } @else {
+          <button (click)="copyToClipboard()" class="copy-button">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#A4FFAF">
+              <path d="M0 0h24v24H0z" fill="none"/>
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+          </button>
+        }
+      </div>
+    
     <div class="result-container">
       <div class="character-lenght">
         <div class="title">
@@ -51,7 +70,10 @@
           <span class="strength-indicator__level-text">{{passwordStrengthText()}}</span>
           <div class="strength-indicator__bar-container">
             @for (bar of [1,2,3,4]; track bar) {
-              <span class="strength-indicator__bar-segment" [class.is-filled]="bar <= strengthLevel()"></span>
+              <span class="strength-indicator__bar-segment" [class.is-filled]="bar <= strengthLevel()"
+              [style.background-color]="bar <= strengthLevel() ? strengthBarColor() : 'var(--color-bar-unfilled)'"
+              [style.border-color]="bar <= strengthLevel() ? strengthBarColor() : 'var(--color-bar-unfilled)'"
+              ></span>
             }
           </div>
         </div>

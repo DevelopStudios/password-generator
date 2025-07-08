@@ -1,5 +1,12 @@
 /* Importing Bootstrap SCSS file. */
-
+:root {
+  // Define your strength colors as CSS variables
+  --color-too-weak-strength: #f64a4a; // Red/Orange for "TOO WEAK!"
+  --color-weak-strength: #fb7c53;     // Orange for "WEAK"
+  --color-medium-strength: #fbd353;   // Yellow for "MEDIUM"
+  --color-strong-strength: #a4ffaf;   // Green for "STRONG"
+  --color-bar-unfilled: #444;        // Color for unfilled bars
+}
 /* You can add global styles to this file, and also import other style files */
 @font-face {
     font-family: 'YourCustomFontName'; /* Choose a unique name for your font */

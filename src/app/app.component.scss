@@ -1,3 +1,6 @@
+
+
+
 .password-generator-container {
     display: grid;
     place-items: center;
@@ -188,7 +191,7 @@
     height: 30px;
     background-color:rgba(0, 0, 0, 0.1);
     border: 2px solid var(--checkbox-border-color);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .strength-indicator__bar-segment.is-filled {
@@ -224,4 +227,80 @@
   font-family: 'YourCustomFontName1';
   font-size: 18px;
   font-weight: bold; 
+}
+
+//Button positioning
+
+.password-display-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #24232C;
+  width: 540px;
+  padding: 0; 
+  box-sizing: border-box;
+}
+
+.password-display {
+    background-color: #24232C;
+    color: #eee;
+    font-family: 'YourCustomFontName1', sans-serif;
+    font-size: 32px;
+    border: none;
+    padding: 25px 35px;
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+    flex-grow: 1;
+    background-image: none;
+    cursor: text;
+}
+
+.copy-button, .copy-feedback {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-strong-strength);
+    font-family: 'YourCustomFontName1', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+.copy-button svg, .copy-feedback svg{
+  width: 20px;
+  height: 20px;
+  fill: #A4FFAF;
+  transition: fill 0.2s ease-in-out;
+}
+
+.copy-button:hover svg {
+  fill: #c0ebd0;
+}
+
+.password-display-wrapper .password-display[ng-reflect-model] { /* Using ng-reflect-model as a general way to target the input with ngModel */
+    padding-right: 150px;
+}
+
+.password-generator-container {
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.password-generator-card {
+    padding: 20px;
+    .result-container {
+        background: #24232C;
+        margin-top: 24px;
+    }
 }

@@ -14,12 +14,15 @@ export class AppComponent implements AfterViewInit {
   generatedPassword = signal('');
   passwordStrengthText = signal('MEDIUM');
   strengthLevel = signal(2);
-
+  strengthBarColor = signal('var(--color-medium-strength)')
   //Signals for checkbox states
   includeUppercase = signal(false);
   includeLowercase = signal(false);
   includeNumbers = signal(false);
   includeSymbols = signal(false);
+
+  //Singnal to control  "COPIED" text visibility
+  isCopied = signal(false);
 
   // --- Character Sets ---
   private readonly uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -104,42 +107,76 @@ export class AppComponent implements AfterViewInit {
     return arr.join('');
   }
 
-  updateStrength(password:string):void{
+  updateStrength(password: string): void {
     let score = 0;
 
-    //Points for length 
-    if(password.length >= 8) score += 1;
-    if(password.length >= 12) score += 1;
-    if(password.length >= 16) score += 1;
+    // A more sophisticated scoring based on character types presence
+    let hasUppercase = /[A-Z]/.test(password);
+    let hasLowercase = /[a-z]/.test(password);
+    let hasNumbers = /[0-9]/.test(password);
+    let hasSymbols = /[!@#$%^&*()_+[\]{}|;:,.<>?]/.test(password);
 
-    //Points for different characters
-     if (/[A-Z]/.test(password)) score += 1;
-    if (/[a-z]/.test(password)) score += 1;
-    if (/[0-9]/.test(password)) score += 1;
-    if (/[!@#$%^&*()_+[\]{}|;:,.<>?]/.test(password)) score += 1;
+    let typeCount = 0;
+    if (hasUppercase) typeCount++;
+    if (hasLowercase) typeCount++;
+    if (hasNumbers) typeCount++;
+    if (hasSymbols) typeCount++;
 
-       if (score < 3) {
-      this.passwordStrengthText.set('WEAK');
-      this.strengthLevel.set(1);
-    } else if (score < 5) {
-      this.passwordStrengthText.set('MEDIUM');
-      this.strengthLevel.set(2);
-    } else if (score < 7) {
-      this.passwordStrengthText.set('GOOD');
-      this.strengthLevel.set(3);
+    // Basic scoring based on length and character type diversity
+    if (password.length < 6) { // Very short passwords are too weak
+      score = 0;
+    } else if (password.length < 8 && typeCount < 2) { // Short, simple passwords
+      score = 1; // Too Weak
+    } else if (password.length < 10 && typeCount < 3) { // Weak to medium
+      score = 2; // Weak
+    } else if (password.length < 12 && typeCount < 4) { // Medium to good
+      score = 3; // Medium
+    } else if (password.length >= 12 && typeCount >= 3) { // Good to excellent
+      score = 4; // Strong
     } else {
-      this.passwordStrengthText.set('EXCELLENT');
-      this.strengthLevel.set(4);
+      score = 2; // Default for cases not explicitly covered, adjust as needed
+    }
+
+
+    // Set strength text, level, and color based on score/conditions
+    switch (score) {
+      case 0:
+        this.passwordStrengthText.set('TOO WEAK!');
+        this.strengthLevel.set(1); // 1 bar filled
+        this.strengthBarColor.set('var(--color-too-weak-strength)');
+        break;
+      case 1:
+        this.passwordStrengthText.set('WEAK');
+        this.strengthLevel.set(2); // 2 bars filled
+        this.strengthBarColor.set('var(--color-weak-strength)');
+        break;
+      case 2:
+        this.passwordStrengthText.set('MEDIUM');
+        this.strengthLevel.set(3); // 3 bars filled
+        this.strengthBarColor.set('var(--color-medium-strength)');
+        break;
+      case 3:
+      case 4: // Consider score 4 as well for strong, adjust thresholds as needed
+        this.passwordStrengthText.set('STRONG');
+        this.strengthLevel.set(4); // 4 bars filled
+        this.strengthBarColor.set('var(--color-strong-strength)');
+        break;
+      default: // Fallback
+        this.passwordStrengthText.set('WEAK');
+        this.strengthLevel.set(2);
+        this.strengthBarColor.set('var(--color-weak-strength)');
+        break;
     }
   }
 
   copyToClipboard(): void {
     navigator.clipboard.writeText(this.generatedPassword()).then(() => {
-      console.log('Password copied to clipboard!');
-      // TODO: Implement a small visual feedback to the user, e.g., a temporary "Copied!" message
+        this.isCopied.set(true);
+        setTimeout(()=>{
+          this.isCopied.set(false);
+        }, 2000);
     }).catch(err => {
-      console.error('Failed to copy password: ', err);
-      // Fallback for older browsers or if permission is denied, or notify user of failure
+        alert('Failed to copy password. Please try again or copy manually');
     });
   }
 
