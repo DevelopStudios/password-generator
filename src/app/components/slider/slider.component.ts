@@ -60,6 +60,32 @@ export class SliderComponent implements OnInit, AfterViewInit {
     // This hook is called after the component's view has been fully initialized,
     // ensuring that @ViewChild references (sliderTrack, sliderThumb) are available.
     this.updateSliderPositions();
+    if (this.sliderThumb && this.sliderTrack) {
+      this.sliderThumb.nativeElement.addEventListener('touchstart', this.onTouchStart.bind(this),{passive:false});
+      this.sliderTrack.nativeElement.addEventListener('touchstart', this.onTouchStart.bind(this), {passive: false});
+    }
+  }
+
+   /**
+   * Calculates the slider value based on a given clientX coordinate.
+   * This is a helper to deduplicate logic for mouse and touch events.
+   * @param clientX The clientX coordinate from a mouse or touch event.
+   * @returns The calculated value for the slider.
+   */
+  private calculateValueFromClientX(clientX: number): number {
+    if (!this.sliderTrack) return this.value; // Fallback if track element isn't available
+
+    const trackRect = this.sliderTrack.nativeElement.getBoundingClientRect();
+    const offsetX = clientX - trackRect.left; // Mouse/touch X position relative to track's left edge
+
+    // Clamp the position within the bounds of the track
+    let newPosition = Math.max(0, Math.min(trackRect.width, offsetX));
+
+    // Calculate normalized value (0-1) based on clamped position
+    const normalizedPosition = newPosition / trackRect.width;
+    const newValue = this.min + normalizedPosition * (this.max - this.min);
+
+    return newValue;
   }
 
   /**
@@ -134,6 +160,44 @@ export class SliderComponent implements OnInit, AfterViewInit {
     document.removeEventListener('mouseup', this.stopDragHandler);
   };
 
+  // -- Touch Events --
+
+   /**
+   * Initiates touch dragging.
+   * @param event The touch event.
+   */
+  onTouchStart(event:TouchEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+      document.addEventListener('touchmove', this.touchDragHandler, { passive: false });
+      document.addEventListener('touchend', this.touchStopDragHandler);
+      document.addEventListener('touchcancel', this.touchStopDragHandler); // Handles scenarios like incoming calls
+
+      // Handle initial touch to set value
+      if (event.touches.length > 0) {
+          this.touchDragHandler(event);
+      }
+  }
+ /**
+   * Handles touch movement to update the slider's value.
+   * @param event The touch event.
+   */
+  touchDragHandler = (event: TouchEvent): void => {
+      if (this.isDragging && event.touches.length > 0) {
+          // Use the clientX of the first touch point
+          this.value = this.calculateValueFromClientX(event.touches[0].clientX);
+      }
+  };
+
+  /**
+   * Stops touch dragging.
+   */
+  touchStopDragHandler = (): void => {
+      this.isDragging = false;
+      document.removeEventListener('touchmove', this.touchDragHandler);
+      document.removeEventListener('touchend', this.touchStopDragHandler);
+      document.removeEventListener('touchcancel', this.touchStopDragHandler);
+  };
   /**
    * Listens for window resize events to re-calculate slider element positions.
    */

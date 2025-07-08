@@ -1,80 +1,125 @@
-
-
+/* Base Styles (Desktop First, will be overridden by mobile media queries) */
 
 .password-generator-container {
     display: grid;
     place-items: center;
     width: 100vw;
-    height: 100vh;
-  }
+    min-height: 100vh; /* Use min-height to allow content to push height */
+    padding: 20px; /* Add some overall padding */
+    box-sizing: border-box;
+}
 
-    .password-generator-card {
-      padding: 20px;
-  
-      .result-container {
-        background: #24232C;
-        margin-top: 24px;
-        .character-lenght {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-left: 34px;
-          padding-right: 34px;
-          padding-top:27px;
-          padding-bottom: 16px;
-          .title {
-            font-family: 'YourCustomFontName1';
-            color: #E6E5EA;
-            font-size: 18px;
-          }
-          .ammount {
-            font-family: 'YourCustomFontName1';
-            color: #A4FFAF;
-            font-size:32px;
-            font-weight: bold;
-          }
-        }
-      }
-    }
+.password-generator-card {
+    padding: 20px;
+    width: 100%; /* Default to full width, max-width will cap it */
+    max-width: 540px; /* Max width for larger screens */
+}
 
-  .password-generator-title {
-        font-family: 'YourCustomFontName', sans-serif;
-        font-size: 24px;
-        color: #817D92;
-        text-align: center;
-        margin-bottom: 42px;
-    }
+.password-generator-title {
+    font-family: 'YourCustomFontName', sans-serif;
+    font-size: 24px;
+    color: #817D92;
+    text-align: center;
+    margin-bottom: 42px;
+}
 
-  .password-display {
-        background-color: #24232C;
-        color: #eee;
-        font-family: 'YourCustomFontName1', sans-serif;
-        font-size: 32px;
-        border: none;
-        padding: 25px 35px;
-        margin: 0;
-        box-sizing: border-box;
-        outline: none;
-        width: 540px;
-        background-image: url('../assets/images/icon-copy.svg');
-        background-repeat: no-repeat;
-        background-position: right 35px center;
-        background-size: 20px;
-        padding-right: 40px;
-        cursor: pointer;
-    }
+/* Password Display and Copy Button/Feedback */
+.password-display-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #24232C;
+  width: 100%; /* Take full width of its parent (.password-generator-card) */
+  max-width: 540px; /* Capped for larger screens if not inside card */
+  padding: 0;
+  box-sizing: border-box;
+}
 
+.password-display {
+    background-color: #24232C;
+    color: #eee;
+    font-family: 'YourCustomFontName1', sans-serif;
+    font-size: 32px;
+    border: none;
+    padding: 25px 35px; /* Default padding for desktop */
+    margin: 0;
+    box-sizing: border-box;
+    outline: none;
+    flex-grow: 1; /* Allow input to take up remaining space */
+    background-image: none; /* Remove background image for copy icon */
+    background-repeat: no-repeat; /* Ensure no residual background if not fully removed */
+    background-position: right 35px center;
+    background-size: 20px;
+    cursor: text; /* Change cursor to text as it's an input field now */
+}
 
-  .check-container {
+.copy-button, .copy-feedback {
+    position: absolute;
+    right: 35px; /* Default position for desktop */
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-strong-strength); /* Green color for COPIED text/icon */
+    font-family: 'YourCustomFontName1', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.copy-button svg, .copy-feedback svg {
+  width: 20px;
+  height: 20px;
+  fill: #A4FFAF; /* Accent color for the icon */
+  transition: fill 0.2s ease-in-out;
+}
+
+.copy-button:hover svg {
+  fill: #c0ebd0; /* Lighter shade on hover for button */
+}
+
+/* Result Container */
+.result-container {
+    background: #24232C;
+    margin-top: 24px;
+}
+
+.result-container .character-lenght {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 27px 34px 16px; /* Combined padding for desktop */
+}
+
+.result-container .character-lenght .title {
+    font-family: 'YourCustomFontName1', sans-serif;
+    color: #E6E5EA;
+    font-size: 18px;
+}
+
+.result-container .character-lenght .ammount {
+    font-family: 'YourCustomFontName1', sans-serif;
+    color: #A4FFAF;
+    font-size:32px;
+    font-weight: bold;
+}
+
+/* Checkbox Container */
+.check-container {
     --bg-color-primary: #23222A;
     --text-color-primary: #E0E0E0;
     --text-color-secondary: #A0A0A0;
     --accent-color-checked: #A4FFAF;
-    --accent-color-strength: #F8CD65;
+    // --accent-color-strength: #F8CD65; /* This variable is no longer used for bar color */
     --checkbox-border-color: #E6E5EA;
     --checkbox-bg-unchecked: #23222A;
     --bar-segment-empty-bg: #3A3940;
-    --font-family-primary: YourCustomFontName1;
+    --font-family-primary: 'YourCustomFontName1', sans-serif;
     --base-font-size: 16px;
 
     background-color: var(--bg-color-primary);
@@ -128,8 +173,6 @@
     flex-shrink: 0;
 }
 
-
-
 .criterion__checkbox-input:checked + .criterion__label .criterion__checkbox-visual {
     background-color: var(--accent-color-checked);
     border-color: var(--accent-color-checked);
@@ -156,11 +199,12 @@
     line-height: 2;
 }
 
+/* Strength Indicator */
 .strength-indicator {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: rgba(0,0,0,0.1);
+    background-color: #18171F; /* Specific background from your image */
     padding: 16px 32px;
     border-radius: var(--border-radius-s);
 }
@@ -189,118 +233,133 @@
 .strength-indicator__bar-segment {
     width: 8px;
     height: 30px;
-    background-color:rgba(0, 0, 0, 0.1);
-    border: 2px solid var(--checkbox-border-color);
-    transition: background-color 0.3s ease-in-out;
+    background-color: var(--color-bar-unfilled); /* Default for unfilled bars */
+    border: 2px solid var(--color-bar-unfilled); /* Border same as background for unfilled */
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 
-.strength-indicator__bar-segment.is-filled {
-    background-color: var(--accent-color-strength);
-    border-color: var(--accent-color-strength);
-}
+/* Remove the .is-filled class from SCSS as its color is now controlled by inline styles in HTML */
+// .strength-indicator__bar-segment.is-filled {
+//     background-color: var(--accent-color-strength);
+//     border-color: var(--accent-color-strength);
+// }
 
-//Button CSS
+
+/* Generate Button */
 .generate-button-no-material {
-  background-color: #A4FFAF; 
-  color: #212529; 
-  font-family: 'YourCustomFontName1';
+  background-color: #A4FFAF;
+  color: #212529;
+  font-family: 'YourCustomFontName1', sans-serif;
   font-size: 18px;
-  font-weight: bold; 
-  padding: 24px 176px; 
+  font-weight: bold;
+  padding: 24px 176px;
   margin-top:35px;
-  border: none; 
-  cursor: pointer; 
-  display: inline-flex; 
-  align-items: center; 
-  justify-content: center; 
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .generate-button-no-material:hover {
-  background-color: #c0ebd0;
+  background-color: var(--bg-color-primary);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  color: var(--text-color-primary);
+  border: 2px solid var(--accent-color-checked);
+  padding: 22px 174px;
 }
 
 .generate-button-no-material .arrow {
   margin-left: 8px;
-  font-family: 'YourCustomFontName1';
+  font-family: 'YourCustomFontName1', sans-serif;
   font-size: 18px;
-  font-weight: bold; 
+  font-weight: bold;
 }
 
-//Button positioning
 
-.password-display-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background-color: #24232C;
-  width: 540px;
-  padding: 0; 
-  box-sizing: border-box;
-}
-
-.password-display {
-    background-color: #24232C;
-    color: #eee;
-    font-family: 'YourCustomFontName1', sans-serif;
-    font-size: 32px;
-    border: none;
-    padding: 25px 35px;
-    margin: 0;
-    box-sizing: border-box;
-    outline: none;
-    flex-grow: 1;
-    background-image: none;
-    cursor: text;
-}
-
-.copy-button, .copy-feedback {
-    position: absolute;
-    right: 35px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--color-strong-strength);
-    font-family: 'YourCustomFontName1', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    text-transform: uppercase;
+/* --- Mobile Responsiveness --- */
+@media (max-width: 600px) {
+  .password-generator-container {
+    padding: 15px; /* Reduce overall padding on smaller screens */
   }
 
-.copy-button svg, .copy-feedback svg{
-  width: 20px;
-  height: 20px;
-  fill: #A4FFAF;
-  transition: fill 0.2s ease-in-out;
-}
+  .password-generator-card {
+    padding: 15px; /* Reduce card padding */
+  }
 
-.copy-button:hover svg {
-  fill: #c0ebd0;
-}
+  .password-generator-title {
+    font-size: 20px; /* Smaller title font */
+    margin-bottom: 30px;
+  }
 
-.password-display-wrapper .password-display[ng-reflect-model] { /* Using ng-reflect-model as a general way to target the input with ngModel */
-    padding-right: 150px;
-}
+  .password-display-wrapper {
+    width: 100%; /* Ensure it fills the card width */
+    max-width: unset; /* Remove max-width restriction for mobile */
+  }
 
-.password-generator-container {
-    display: grid;
-    place-items: center;
-    width: 100vw;
-    height: 100vh;
-}
+  .password-display {
+    font-size: 24px; /* Smaller password font */
+    padding: 18px 25px; /* Adjust padding for smaller input */
+  }
 
-.password-generator-card {
-    padding: 20px;
-    .result-container {
-        background: #24232C;
-        margin-top: 24px;
+  .copy-button, .copy-feedback {
+    right: 20px; /* Adjust position on mobile */
+    font-size: 16px; /* Smaller font for "COPIED" */
+    gap: 5px; /* Reduce gap */
+  }
+
+  .copy-button svg, .copy-feedback svg {
+    width: 18px; /* Smaller icon */
+    height: 18px;
+  }
+
+  .result-container {
+    .character-lenght {
+      padding: 20px 20px 10px; /* Smaller padding */
+      .title {
+        font-size: 16px;
+      }
+      .ammount {
+        font-size: 28px;
+      }
     }
+  }
+
+  .check-container {
+    padding: 15px 20px; /* Smaller padding */
+  }
+
+  .criterion__text {
+    font-size: 15px; /* Slightly smaller criterion text */
+  }
+
+  .strength-indicator {
+    padding: 12px 20px; /* Smaller padding */
+  }
+
+  .strength-indicator__title {
+    font-size: 16px;
+  }
+
+  .strength-indicator__level-text {
+    font-size: 18px;
+  }
+
+  .strength-indicator__bar-container {
+    gap: 8px; /* Slightly smaller gap */
+  }
+
+  .strength-indicator__bar-segment {
+    width: 7px; /* Slightly smaller bars */
+    height: 25px;
+  }
+
+  .generate-button-no-material {
+    width: 100%; /* Full width button */
+    padding: 18px 0; /* Vertical padding only, width handles horizontal */
+    font-size: 16px;
+    margin-top: 25px;
+  }
 }
