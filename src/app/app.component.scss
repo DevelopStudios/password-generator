@@ -363,3 +363,9 @@
     margin-top: 25px;
   }
 }
+
+@media (max-width: 500px) {
+  .generate-button-no-material:hover {
+    padding: 16px 0; 
+  }
+}
