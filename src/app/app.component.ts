@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, signal} from '@angular/core';
+import { AfterViewInit, Component, inject, signal} from '@angular/core';
 import { SliderComponent } from './components/slider/slider.component';
 import { FormsModule } from '@angular/forms';
+import { MnemonicService } from './services/mnemonic-service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -10,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AppComponent implements AfterViewInit {
   title = 'password-generator';
+  loadProgress = 0;
   mySliderValue = signal(9);
   generatedPassword = signal('');
   passwordStrengthText = signal('MEDIUM');
@@ -20,6 +22,9 @@ export class AppComponent implements AfterViewInit {
   includeLowercase = signal(false);
   includeNumbers = signal(false);
   includeSymbols = signal(false);
+
+  //AI Model
+  public mnemonicService = inject(MnemonicService);
 
   //Singnal to control  "COPIED" text visibility
   isCopied = signal(false);
@@ -32,6 +37,14 @@ export class AppComponent implements AfterViewInit {
 
   constructor(){
     this.generatedPassword();
+    this.mnemonicService.loadModel();
+    this.mnemonicService.progress$.subscribe(p => this.loadProgress = p * 100);
+    this.mnemonicService.isReady$.subscribe(ready => {
+      if (ready) {
+        alert('AI Mnemonic model loaded successfully!');
+        console.log('Mnemonic model is ready for generation.');
+      }
+    });
   }
   ngAfterViewInit(): void {  
   
