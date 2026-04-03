@@ -7,6 +7,7 @@ export class MnemonicService {
   public progress$ = new BehaviorSubject<number>(0);
   public story$ = new BehaviorSubject<string>('');
   public isReady$ = new BehaviorSubject<boolean>(false);
+  public isGeneratingStory$ = new BehaviorSubject<boolean>(false);
 
   constructor() {
     if (typeof Worker !== 'undefined') {
@@ -23,6 +24,7 @@ export class MnemonicService {
             break;
           case 'result':
             this.story$.next(data.story);
+            this.isGeneratingStory$.next(false);
             break;
         }
       };
@@ -32,11 +34,13 @@ export class MnemonicService {
   loadModel() {
     this.worker?.postMessage({ 
       type: 'load', 
-      modelId: 'SmolLM2-135M-Instruct-q0f16-MLC' 
+      modelId: 'Qwen2.5-3B-Instruct-q4f16_1-MLC',
     });
   }
 
   generateStory(password: string) {
+    this.story$.next(''); // Clear previous story
+    this.isGeneratingStory$.next(true);
     this.worker?.postMessage({ type: 'generate', password });
   }
 }

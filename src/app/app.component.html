@@ -24,6 +24,9 @@
       </div>
     
     <div class="result-container">
+      @if (isModelReady()) {
+        <app-mnemonic-card [story]="mnemonicStory()" [password]="generatedPassword()" [isLoading]="isGeneratingStory()"></app-mnemonic-card>
+      }
       <div class="character-lenght">
         <div class="title">
           Character Length

@@ -1,0 +1,100 @@
+/* Container */
+.mnemonic-card {
+  background-color: #24232C;
+  width: 91%;
+  border-radius: 12px; /* Matches Neutrals spec radius */
+  padding: 24px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Header Section */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-label {
+  color: #817d92;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+}
+
+.ai-icon {
+  color: #a4ffaf; /* Primary #A4FFAF */
+  width: 20px;
+  height: 20px;
+}
+
+/* Sentence Area */
+.sentence-box {
+  background-color: #121117;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.sentence-text {
+  color: #e6e5ea;
+  font-size: 20px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Highlight Helpers */
+.hl-word {
+  color: #a4ffaf; /* Primary */
+  font-weight: 600;
+}
+
+.hl-sym {
+  color: #a4ffaf;
+  font-weight: 600;
+}
+
+.hl-mean {
+  color: #817d92;
+  font-weight: 300;
+  font-size: 0.9em;
+}
+
+/* Footer Section */
+.visual-footer {
+  color: #817d92;
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 300;
+}
+
+/* Skeleton Loaders */
+.skeleton-bar {
+  background: linear-gradient(90deg, #1c1b22 25%, #24232c 50%, #1c1b22 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 4px;
+}
+
+.skeleton-sentence-1 {
+  height: 24px;
+  width: 90%;
+  margin-bottom: 12px;
+}
+
+.skeleton-sentence-2 {
+  height: 24px;
+  width: 65%;
+}
+
+.skeleton-visual {
+  height: 16px;
+  width: 80%;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
