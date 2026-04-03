@@ -67,7 +67,7 @@ ${charBreakdown}
         { role: "user", content: prompt }
       ],
       temperature: 0.2, // Low temperature for high predictability and accuracy
-      max_tokens: 800
+      max_tokens: 250
     });
 
     // Re-prepend the tag if the model started generating immediately
