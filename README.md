@@ -1,27 +1,58 @@
-# PasswordGenerator
+# VaultKey
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.2.
+A password generator with in-browser AI mnemonics — no server, no API keys, no data sent anywhere.
 
-## Development server
+**Live:** [password-generator-duah3.kinsta.page](https://password-generator-duah3.kinsta.page)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## What makes it interesting
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Strong passwords are hard to remember. VaultKey generates a password and immediately creates a mnemonic to go with it — a deterministic word per character, then a vivid scene from a local LLM to make it stick.
 
-## Build
+Everything runs in the browser. The LLM (Qwen2.5-1.5B) runs via WebGPU in a Web Worker — no server round-trip, no inference API, nothing leaves the device.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
 
-## Running unit tests
+## How it works
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+| Layer | Technology | Role |
+|-------|-----------|------|
+| Entropy | Web Crypto API | Cryptographically secure character selection |
+| Word map | Deterministic lookup | Instant character → word mapping (always available) |
+| Scene generation | Qwen2.5-1.5B-Instruct via WebLLM | Streams a vivid sentence from the word list — WebGPU only |
+| Inference | Web Worker | Non-blocking — UI stays responsive during generation |
+| Framework | Angular 17+ | Signals, OnPush, standalone components |
 
-## Running end-to-end tests
+The word map is deterministic and renders instantly. The LLM scene is a progressive enhancement — if WebGPU isn't available (older hardware, mobile), the card still shows the word pairs without the scene.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## Stack
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Angular 17
+- `@mlc-ai/web-llm` — WebGPU inference in-browser
+- Web Crypto API
+- TypeScript
+
+---
+
+## Run locally
+
+```bash
+npm install
+ng serve
+```
+
+Navigate to `http://localhost:4200`
+
+---
+
+## WebGPU compatibility
+
+WebGPU is required for the AI scene. Supported on:
+
+- Chrome 113+ (desktop)
+- Edge 113+ (desktop)
+
+Not yet supported on Firefox or most mobile browsers. The password generator and word map work everywhere — only the scene is gated.
