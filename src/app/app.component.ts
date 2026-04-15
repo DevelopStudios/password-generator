@@ -44,12 +44,14 @@ export class AppComponent {
   /** Service for AI-powered mnemonic generation. */
   public mnemonicService = inject(MnemonicService);
 
-  /** Tracks if the AI model is ready to generate stories. */
+  /** Tracks if the AI model is ready to generate scenes. */
   public isModelReady = toSignal(this.mnemonicService.isReady$, { initialValue: false });
-  /** The current AI-generated mnemonic story. */
-  public mnemonicStory = toSignal(this.mnemonicService.story$, { initialValue: '' });
-  /** Tracks if the AI is currently generating a story. */
-  public isGeneratingStory = toSignal(this.mnemonicService.isGeneratingStory$, { initialValue: false });
+  /** Word map: deterministic char → word pairs, always available instantly. */
+  public wordMap = toSignal(this.mnemonicService.wordMap$, { initialValue: [] });
+  /** The LLM-generated scene description. */
+  public mnemonicScene = toSignal(this.mnemonicService.scene$, { initialValue: '' });
+  /** Tracks if the LLM is currently generating a scene. */
+  public isGeneratingScene = toSignal(this.mnemonicService.isGeneratingScene$, { initialValue: false });
   public includeNumbers = signal(false);
   public includeSymbols = signal(false);
 
@@ -63,26 +65,26 @@ export class AppComponent {
   private readonly symbolsChars = '!@#$%^&*()_+[]{}|;:,.<>?';
 
   constructor() {
-    // Initialize AI model and track download progress
-    this.mnemonicService.loadModel();
     this.mnemonicService.progress$.subscribe(p => this.loadProgress = p * 100);
-    this.mnemonicService.isReady$.subscribe(value =>{
-      if(value){
-        this.mnemonicService.generateStory(this.generatedPassword());
-      }
-    })
+    this.mnemonicService.isReady$.subscribe(value => {
+      if (value) this.mnemonicService.generateStory(this.generatedPassword());
+    });
+
     // Reactively trigger story generation when the password changes
     toObservable(this.generatedPassword)
       .pipe(
         filter(password => password.length > 0),
-        debounceTime(1000), // Wait for 1s pause in changes
-        distinctUntilChanged(), // Only trigger if the password is actually different
+        debounceTime(1000),
+        distinctUntilChanged(),
         switchMap(password => {
+          // Lazy-load the model on first password change — only if WebGPU is available
+          this.mnemonicService.loadModel();
           this.mnemonicService.generateStory(password);
           return of(null);
         })
       )
       .subscribe();
+
     // Generate an initial password on component load
     this.generatePassword();
   }
@@ -92,7 +94,6 @@ export class AppComponent {
    * This method will be called when the "GENERATE" button is clicked.
    */
   public generatePassword(): void {
-    this.mnemonicService.isGeneratingStory$.next(true);
     const selection = this.getSelectionConfig();
     let charSet = selection.pool;
     let newPassword = selection.guaranteed;

@@ -33,32 +33,35 @@
 .sentence-box {
   background-color: #121117;
   border-radius: 4px;
-  padding: 20px;
+  padding: 16px;
   margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
 }
 
-.sentence-text {
-  color: #e6e5ea;
-  font-size: 20px;
-  line-height: 1.6;
-  font-weight: 400;
+/* One column per character */
+.word-pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
 }
 
-/* Highlight Helpers */
-.hl-word {
-  color: #a4ffaf; /* Primary */
-  font-weight: 600;
-}
-
-.hl-sym {
-  color: #a4ffaf;
-  font-weight: 600;
-}
-
-.hl-mean {
+.hl-char {
   color: #817d92;
-  font-weight: 300;
-  font-size: 0.9em;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hl-word {
+  color: #a4ffaf;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Footer Section */

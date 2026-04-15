@@ -8,24 +8,22 @@
     </div>
   </div>
 
+  <!-- Word map: always shown instantly, deterministic -->
   <div class="sentence-box">
-    @if (isLoading()) {
-      <div class="skeleton-bar skeleton-sentence-1"></div>
-      <div class="skeleton-bar skeleton-sentence-2"></div>
-    } @else {
-      <p class="sentence-text">
-        @for (token of tokens(); track $index) {
-          <span [class]="token.class">{{ token.text }}</span>
-        }
-      </p>
+    @for (entry of wordMap(); track $index) {
+      <span class="word-pair">
+        <span class="hl-char">{{ entry.char }}</span>
+        <span class="hl-word">{{ entry.word }}</span>
+      </span>
     }
   </div>
 
+  <!-- Scene: LLM narrative, streams in when model is ready -->
   <div class="visual-footer">
     @if (isLoading()) {
       <div class="skeleton-bar skeleton-visual"></div>
-    } @else {
-      {{ parsedStory().visual }}
+    } @else if (scene()) {
+      {{ scene() }}
     }
   </div>
 </div>
