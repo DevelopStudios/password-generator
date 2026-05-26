@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Add this import for common Angular directives
 
 @Component({
@@ -12,6 +12,8 @@ export class SliderComponent implements OnInit, AfterViewInit {
   @Input() min = 0;
   @Input() max = 100;
   @Input() step = 1;
+
+  private cdr = inject(ChangeDetectorRef);
 
   @Input()
   get value(): number {
@@ -60,6 +62,7 @@ export class SliderComponent implements OnInit, AfterViewInit {
     // This hook is called after the component's view has been fully initialized,
     // ensuring that @ViewChild references (sliderTrack, sliderThumb) are available.
     this.updateSliderPositions();
+    this.cdr.detectChanges();
     if (this.sliderThumb && this.sliderTrack) {
       this.sliderThumb.nativeElement.addEventListener('touchstart', this.onTouchStart.bind(this),{passive:false});
       this.sliderTrack.nativeElement.addEventListener('touchstart', this.onTouchStart.bind(this), {passive: false});
@@ -108,6 +111,16 @@ export class SliderComponent implements OnInit, AfterViewInit {
     this.thumbPosition = normalizedValue * trackWidth;
     // The fill width extends to the same point as the thumb's center
     this.fillWidth = this.thumbPosition;
+  }
+
+  /**
+   * Handles click/mousedown on the track to jump to a specific value.
+   * @param event The mouse event.
+   */
+  onTrackClick(event: MouseEvent): void {
+    this.value = this.calculateValueFromClientX(event.clientX);
+    // Optionally start drag if user keeps mouse down
+    this.startDrag(event);
   }
 
   /**

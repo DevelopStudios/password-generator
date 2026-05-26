@@ -22,7 +22,8 @@ Everything runs in the browser. The LLM (Qwen2.5-1.5B) runs via WebGPU in a Web 
 | Word map | Deterministic lookup | Instant character → word mapping (always available) |
 | Scene generation | Qwen2.5-1.5B-Instruct via WebLLM | Streams a vivid sentence from the word list — WebGPU only |
 | Inference | Web Worker | Non-blocking — UI stays responsive during generation |
-| Framework | Angular 17+ | Signals, OnPush, standalone components |
+| Framework | Angular | Signals, standalone components |
+| Testing | Playwright & Jasmine | Comprehensive E2E and Unit test coverage |
 
 The word map is deterministic and renders instantly. The LLM scene is a progressive enhancement — if WebGPU isn't available (older hardware, mobile), the card still shows the word pairs without the scene.
 
@@ -30,21 +31,47 @@ The word map is deterministic and renders instantly. The LLM scene is a progress
 
 ## Stack
 
-- Angular 17
-- `@mlc-ai/web-llm` — WebGPU inference in-browser
-- Web Crypto API
-- TypeScript
+- **Framework:** Angular
+- **AI Inference:** `@mlc-ai/web-llm` (WebGPU)
+- **Security:** Web Crypto API
+- **E2E Testing:** Playwright
+- **Unit Testing:** Jasmine & Karma
 
 ---
 
 ## Run locally
 
 ```bash
+# Install dependencies
 npm install
-ng serve
+
+# Start development server
+npm start
 ```
 
 Navigate to `http://localhost:4200`
+
+---
+
+## Testing
+
+VaultKey includes a robust test suite covering both logic and UI interactions.
+
+### Unit Tests
+Run component and service tests using Jasmine/Karma:
+```bash
+npm test
+```
+
+### End-to-End (E2E) Tests
+Run browser automation tests with Playwright:
+```bash
+# Run all E2E tests
+npm run e2e
+
+# Run tests in UI mode
+npm run e2e:ui
+```
 
 ---
 

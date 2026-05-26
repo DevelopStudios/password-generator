@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { SliderComponent } from './components/slider/slider.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -84,12 +84,9 @@ export class AppComponent {
         })
       )
       .subscribe();
-
-    // Generate an initial password on component load
-    this.generatePassword();
   }
 
-   /**
+  /**
    * Generates a password based on selected criteria and updates the UI.
    * This method will be called when the "GENERATE" button is clicked.
    */
@@ -139,10 +136,10 @@ export class AppComponent {
       guaranteed += this.getRandomChar(this.symbolsChars);
     }
 
-    // Default to lowercase if nothing is selected
+    // If nothing is selected, we use lowercase but DON'T update the signal here
+    // to avoid side effects during generation.
     if (!pool) {
       pool = this.lowercaseChars;
-      this.includeLowercase.set(true);
       guaranteed += this.getRandomChar(this.lowercaseChars);
     }
 
@@ -168,14 +165,17 @@ export class AppComponent {
   /**
    * Analyzes the provided password and updates UI strength signals.
    * @param password The password to evaluate.
+   * @param isManualInput Whether the update was triggered by manual user input (typing/pasting).
    */
-  public updateStrength(password: string): void {
-    // Sync UI controls to reflect the actual content of the password
-    this.includeUppercase.set(/[A-Z]/.test(password));
-    this.includeLowercase.set(/[a-z]/.test(password));
-    this.includeNumbers.set(/[0-9]/.test(password));
-    this.includeSymbols.set(/[!@#$%^&*()_+[\]{}|;:,.<>?]/.test(password));
-    this.mySliderValue.set(password.length);
+  public updateStrength(password: string, isManualInput: boolean = false): void {
+    if (isManualInput) {
+      // Sync UI controls to reflect the actual content of the password ONLY if manually edited
+      this.includeUppercase.set(/[A-Z]/.test(password));
+      this.includeLowercase.set(/[a-z]/.test(password));
+      this.includeNumbers.set(/[0-9]/.test(password));
+      this.includeSymbols.set(/[!@#$%^&*()_+[\]{}|;:,.<>?]/.test(password));
+      this.mySliderValue.set(password.length);
+    }
 
     const typeCount = this.calculateTypeDiversity(password);
     const score = this.calculateStrengthScore(password.length, typeCount);

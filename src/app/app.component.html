@@ -4,7 +4,7 @@
       Password Generator
     </div>
     <div class="password-display-wrapper">
-        <input type="text" placeholder="P4$5W0rD!" class="password-display" [(ngModel)]="generatedPassword" (input)="updateStrength(generatedPassword())">
+        <input type="text" placeholder="P4$5W0rD!" class="password-display" [value]="generatedPassword()" (input)="generatedPassword.set($any($event.target).value); updateStrength($any($event.target).value, true)">
         @if(isCopied()) {
           <span class="copy-feedback">
           COPIED
@@ -35,32 +35,32 @@
           {{mySliderValue()}}
         </div>
       </div>
-      <app-slider [min]="1" [max]="20" [step]="1" [(value)]="mySliderValue"></app-slider>
+      <app-slider id="password-slider" [min]="1" [max]="20" [step]="1" [value]="mySliderValue()" (valueChange)="mySliderValue.set($event)"></app-slider>
       <div class="check-container">
         <ul class="criteria-list">
           <li class="criterion">
-            <input type="checkbox" id="crit-uppercase" class="criterion__checkbox-input" [(ngModel)]="includeUppercase">
+            <input type="checkbox" id="crit-uppercase" class="criterion__checkbox-input" [checked]="includeUppercase()" (change)="includeUppercase.set($any($event.target).checked)">
             <label for="crit-uppercase" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Uppercase Letters</span>
             </label>
           </li>
           <li class="criterion">
-            <input type="checkbox" id="crit-lowercase" class="criterion__checkbox-input" [(ngModel)]="includeLowercase">
+            <input type="checkbox" id="crit-lowercase" class="criterion__checkbox-input" [checked]="includeLowercase()" (change)="includeLowercase.set($any($event.target).checked)">
             <label for="crit-lowercase" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Lowercase Letters</span>
             </label>
           </li>
           <li class="criterion">
-            <input type="checkbox" id="crit-numbers" class="criterion__checkbox-input" [(ngModel)]="includeNumbers">
+            <input type="checkbox" id="crit-numbers" class="criterion__checkbox-input" [checked]="includeNumbers()" (change)="includeNumbers.set($any($event.target).checked)">
             <label for="crit-numbers" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Numbers</span>
             </label>
           </li>
           <li class="criterion">
-            <input type="checkbox" id="crit-symbols" class="criterion__checkbox-input" [(ngModel)]="includeSymbols">
+            <input type="checkbox" id="crit-symbols" class="criterion__checkbox-input" [checked]="includeSymbols()" (change)="includeSymbols.set($any($event.target).checked)">
             <label for="crit-symbols" class="criterion__label">
               <span class="criterion__checkbox-visual"></span>
               <span class="criterion__text">Include Symbols</span>

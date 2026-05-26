@@ -1,5 +1,5 @@
 <div class="slider-container">
-    <div class="slider-track" #sliderTrack> <div class="slider-track-fill" [style.width.px]="fillWidth"></div>
+    <div class="slider-track" #sliderTrack (mousedown)="onTrackClick($event)"> <div class="slider-track-fill" [style.width.px]="fillWidth"></div>
 
       <div
         class="slider-thumb"
